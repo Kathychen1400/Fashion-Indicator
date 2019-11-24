@@ -1,0 +1,45 @@
+echo "# Fashion-Indicator" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin https://github.com/Kathychen1400/Fashion-Indicator.git
+git push -u origin master
+(train_x, train_y) , (test_x, test_y) = fashion_mnist.load_data()  #load images into training and test datasets
+train_x = train_x.astype('float32') / 255                
+test_x = test_x.astype('float32') / 255                   
+print(train_x.shape)                                       
+print(train_y.shape)                                       
+print(test_x.shape)                                       
+print(test_y.shape)
+train_x[2]
+train_x = train_x.reshape(60000,784)            
+test_x = test_x.reshape(10000,784)                 
+train_y = keras.utils.to_categorical(train_y,10)   
+test_y = keras.utils.to_categorical(test_y,10)   
+print(train_x.shape)   
+print(train_y.shape)
+print(test_x.shape)       
+print(test_y.shape)
+train_x[10]
+model = Sequential()                                            
+model.add(Dense(units=128,activation="relu",input_shape=(784,))) 
+model.add(Dense(units=128,activation="relu"))   
+model.add(Dense(units=128,activation="relu"))  
+model.add(Dense(units=10,activation="softmax"))    
+model.summary()
+model.compile(optimizer=SGD(0.001),loss="categorical_crossentropy",metrics=["accuracy"])
+history=model.fit(train_x,train_y,batch_size=32,epochs=50,verbose=1)
+model.save("mnistmodel.h5")      
+accuracy = model.evaluate(x=test_x,y=test_y,batch_size=32)
+plt.plot(history.history['accuracy'])           #plot accuracy
+plt.title('model accuracy')                #add a title for the plot
+plt.ylabel('accuracy')                     #add a y axis label
+plt.xlabel('epoch')                        #add x axis label
+plt.legend(['train'], loc='upper left')    #add a legend and specify the position
+plt.show()
+plt.plot(history.history['loss'])          #plot loss
+plt.title('model loss')                    #add a title for the plot
+plt.ylabel('loss')                         #add a y axis label
+plt.xlabel('epoch')                        #add x axis label
+plt.legend(['train'], loc='upper left')    #add a legend and specify the position
+plt.show()                                 #display plot
